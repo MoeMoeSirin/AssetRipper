@@ -1,3 +1,7 @@
+# 可以直接部署在服务器的版本，以便移动设备使用
+
+将 AssetRipper.GUI.Web 的工作方式改为文件上传，并为了安全性移除了一些功能的访问
+
 # AssetRipper
 
 [![](https://img.shields.io/github/downloads/AssetRipper/AssetRipper/total.svg)](https://github.com/AssetRipper/AssetRipper/releases)
