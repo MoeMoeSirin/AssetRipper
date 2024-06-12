@@ -11,3 +11,4 @@ bin
 .vscode
 *.blend1
 launchSettings.json
+/Source/AssetRipper.GUI.Free/uploads

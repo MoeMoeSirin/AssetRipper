@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AssetRipper.Import.Logging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
 namespace AssetRipper.GUI.Web.Pages;
@@ -13,25 +14,18 @@ public static class Commands
 		static async Task<string?> ICommand.Execute(HttpRequest request)
 		{
 			IFormCollection form = await request.ReadFormAsync();
-
-			string[]? paths;
-			if (form.TryGetValue("Path", out StringValues values))
+			IFormFile? file =form.Files.FirstOrDefault();
+			if (file == null || file.Length < 10240||file.Length> 10485760)
+				return null;
+			Logger.Info(LogCategory.Import, $"Receive File: {file.FileName}  Size: {file.Length}");
+			string path = Path.Combine("uploads", Path.GetRandomFileName());
+			Directory.CreateDirectory("uploads");
+			using (FileStream fs = new FileStream(path, FileMode.Create))
 			{
-				paths = values;
+				await file.CopyToAsync(fs);
 			}
-			else if (Dialogs.Supported)
-			{
-				Dialogs.OpenFiles.GetUserInput(out paths);
-			}
-			else
-			{
-				return CommandsPath;
-			}
-
-			if (paths is { Length: > 0 })
-			{
-				GameFileLoader.LoadAndProcess(paths);
-			}
+			GameFileLoader.LoadAndProcess([path]);
+			File.Delete(path);
 			return null;
 		}
 	}

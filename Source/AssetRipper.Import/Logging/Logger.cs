@@ -41,7 +41,7 @@ namespace AssetRipper.Import.Logging
 			{
 				foreach (ILogger instance in loggers)
 				{
-					instance?.Log(type, category, message);
+					instance?.Log(type, category, $"[{DateTime.Now}]{message}");
 				}
 			}
 		}

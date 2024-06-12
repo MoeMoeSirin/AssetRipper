@@ -64,23 +64,12 @@ public abstract class DefaultPage : HtmlPage
 			{
 				using (new Li(writer).End())
 				{
-					WritePostLink(writer, "/LoadFile", Localization.MenuFileOpenFile, "dropdown-item");
-				}
-				using (new Li(writer).End())
-				{
-					WritePostLink(writer, "/LoadFolder", Localization.MenuFileOpenFolder, "dropdown-item");
+					new Input(writer).WithType("file").WithId("fileInput").WithStyle("display: none;").Close();
+					new Button(writer).WithId("uploadButton").WithClass("dropdown-item").Close(Localization.MenuFileOpenFile.ToHtml());
 				}
 				using (new Li(writer).End())
 				{
 					WritePostLink(writer, "/Reset", Localization.MenuFileReset, "dropdown-item");
-				}
-				using (new Li(writer).End())
-				{
-					new Hr(writer).WithClass("dropdown-divider").Close();
-				}
-				using (new Li(writer).End())
-				{
-					new A(writer).WithClass("dropdown-item").WithHref("/Settings/Edit").Close(Localization.Settings);
 				}
 			}
 		}
@@ -99,18 +88,6 @@ public abstract class DefaultPage : HtmlPage
 				}
 				using (new Li(writer).End())
 				{
-					new A(writer).WithClass("dropdown-item").WithHref("/Settings/Edit").Close(Localization.Settings);
-				}
-				using (new Li(writer).End())
-				{
-					new A(writer).WithClass("dropdown-item").WithHref("/ConfigurationFiles").Close(Localization.ConfigurationFiles);
-				}
-				using (new Li(writer).End())
-				{
-					new A(writer).WithClass("dropdown-item").WithHref("/Commands").Close(Localization.Commands);
-				}
-				using (new Li(writer).End())
-				{
 					new A(writer).WithClass("dropdown-item").WithHref("/Privacy").Close(Localization.Privacy);
 				}
 				using (new Li(writer).End())
@@ -123,32 +100,6 @@ public abstract class DefaultPage : HtmlPage
 
 	private static void WriteExportMenu(TextWriter writer)
 	{
-		using (new Div(writer).WithClass("btn-group dropdown").End())
-		{
-			WriteDropdownButton(writer, Localization.MenuExport);
-			using (new Ul(writer).WithClass("dropdown-menu").End())
-			{
-				if (GameFileLoader.IsLoaded)
-				{
-					using (new Li(writer).End())
-					{
-						new A(writer).WithClass("dropdown-item").WithHref("/Commands").Close(Localization.MenuExportAll);
-					}
-					string version = GameFileLoader.GameBundle.GetMaxUnityVersion().ToString();
-					using (new Li(writer).End())
-					{
-						new A(writer).WithClass("dropdown-item").WithNewTabAttributes().WithHref($"unityhub://{version}").Close(version);
-					}
-				}
-				else
-				{
-					using (new Li(writer).End())
-					{
-						new A(writer).WithClass("dropdown-item disabled").WithCustomAttribute("aria-diabled", "true").Close(Localization.MenuExportAll);
-					}
-				}
-			}
-		}
 	}
 
 	private static void WriteLanguageMenu(TextWriter writer)
@@ -205,5 +156,6 @@ public abstract class DefaultPage : HtmlPage
 		writer.Write("""<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>""");
 		Bootstrap.WriteScriptReference(writer);
 		new Script(writer).WithSrc("/js/site.js").Close();
+		new Script(writer).WithSrc("/js/upload.js").Close();
 	}
 }
